@@ -34,8 +34,7 @@ GAME_OVER_COLOR = (255, 50, 50)
 # Tipografías
 font = pygame.font.Font("DailyMemory-EBdl.ttf", 30)
 big_font = pygame.font.Font("DailyMemory-EBdl.ttf", 60)
-small_font = pygame.font.Font( "courier new.ttf ", 20)  # esta sera la fuente de el NIVEL y TIEMPO
-
+small_font = pygame.font.Font("courier new.ttf", 20)  # Fuente para NIVEL y TIEMPO
 
 # Tiempo por juego completo
 TOTAL_TIME = 600  # 10 minutos
@@ -182,15 +181,13 @@ while run:
     elif state == PLAYING:
         current_time = time.time()
         elapsed = current_time - start_time
-        remaining_time = max(0, int(TOTAL_TIME - elapsed))
+        remaining_time = max(0, int(TOTAL_TIME - elapsed + 0.99))  # Ajuste para redondear hacia arriba
 
         # Cronómetro y nivel
         timer_text = small_font.render(f"Tiempo: {remaining_time // 60:02}:{remaining_time % 60:02}", True, TEXT_COLOR)
         screen.blit(timer_text, (20, 20))
         level_text = small_font.render(f"Nivel {level}", True, TEXT_COLOR)
         screen.blit(level_text, (SCREEN_WIDTH - 150, 20))
-       
-
 
         # Tablero
         pygame.draw.rect(screen, BOARD_BORDER_COLOR, (BOARD_X_OFFSET, BOARD_Y_OFFSET, BOARD_WIDTH, BOARD_HEIGHT), 4)
@@ -210,6 +207,7 @@ while run:
         if len(locked_boxes) == len(grid_positions):
             if level < max_levels:
                 level += 1
+                start_time = time.time()  # Reiniciar temporizador al nuevo nivel
                 grid_positions, boxes, original_positions, locked_boxes = start_level()
             else:
                 state = GAME_OVER
